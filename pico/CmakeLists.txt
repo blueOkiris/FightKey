@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.12)
-get_filename_component(PARENT_DIR ../ ABSOLUTE)
+
 include(pico_sdk_import.cmake)
+
 project(fight-key)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
@@ -16,7 +19,7 @@ include_directories(
 )
 
 target_link_libraries(
-    fight-key pico_stdlib pico_multicore tinyusb_board tinyusb_device
+    fight-key pico_stdlib tinyusb_board tinyusb_device
 )
 
 pico_add_extra_outputs(fight-key)

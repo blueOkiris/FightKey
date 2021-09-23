@@ -19,14 +19,18 @@ install-deps :
 	cd /tmp; git clone -b master https://github.com/raspberrypi/pico-sdk.git
 	cd /tmp/pico-sdk; git submodule update --init
 
+pico_sdk_import.cmake : /tmp/pico-sdk
+	cp /tmp/pico-sdk/external/pico_sdk_import.cmake ./
+
 .PHONY : clean
 clean :
 	rm -rf /tmp/pico-sdk
+	rm -rf pico_sdk_import.cmake
 	rm -rf build
 	rm -rf *.uf2
 
 # Main targets
-$(OBJNAME).uf2 : /tmp/pico-sdk $(SRC) $(HEADERS) CMakeLists.txt
+$(OBJNAME).uf2 : pico_sdk_import.cmake $(SRC) $(HEADERS) CMakeLists.txt
 	mkdir -p build
 	cd build; PICO_SDK_PATH=/tmp/pico-sdk cmake ..
 	cd build; make
