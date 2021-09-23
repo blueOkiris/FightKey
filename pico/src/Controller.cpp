@@ -12,7 +12,7 @@
 
 using namespace fightkey;
 
-GpioController::ButtonController(const std::map<Button, uint> &btnMapping) :
+GpioController::GpioController(const std::map<Button, uint> &btnMapping) :
         _btnMapping(btnMapping) {
     _initPins();
 }
@@ -21,8 +21,8 @@ std::map<Button, bool> GpioController::state(void) const {
     std::map<Button, bool> curState;
     for(const auto &btnPinPair : _btnMapping) {
         curState.insert(std::make_pair(
-            btnPinPair.second, gpio_get(btnPinPair.first)
-        );
+            btnPinPair.first, gpio_get(btnPinPair.second)
+        ));
     }
     return curState;
 }
@@ -30,6 +30,6 @@ std::map<Button, bool> GpioController::state(void) const {
 void GpioController::_initPins(void) const {
     for(const auto &btnPinPair : _btnMapping) {
         gpio_init(btnPinPair.second);
-        gpio_set_dir(btnPair.second, false);
+        gpio_set_dir(btnPinPair.second, false);
     }
 }

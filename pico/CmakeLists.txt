@@ -8,7 +8,7 @@ pico_sdk_init()
 add_executable(
     fight-key
     src/main.cpp
-    src/usb_descriptors.cpp src/report.cpp src/Hid.cpp
+    src/usb_descriptors.c src/report.c src/Hid.cpp
     src/Controller.cpp
 )
 include_directories(

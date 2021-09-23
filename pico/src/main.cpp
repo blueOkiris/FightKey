@@ -3,7 +3,7 @@
  * Description: Entry point for Keyboard system
  */
 
-#include <hid.h>
+#include <bsp/board.h>
 #include <map>
 #include <memory>
 #include <Buttons.hpp>
@@ -52,11 +52,11 @@ int main(void) {
     while(1) {
         keyboard.update();
         
-        const auto btnState = controller->state();
+        const auto btnState = controller.state();
         for(const auto &btnStatePair : btnState) {
             if(btnStatePair.second) {
                 keyboard.pressKey(btnStatePair.first);
-                keyboard.releaseKey(btnStatePair.first);
+                keyboard.releaseKey();
             }
         }
     }

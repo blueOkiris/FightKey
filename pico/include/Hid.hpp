@@ -47,6 +47,6 @@ namespace fightkey {
 
             uint32_t _startMs;
             bool _hasKey, _toggle, _release;
-            uint8_t key;
+            uint8_t _key;
     };
 }

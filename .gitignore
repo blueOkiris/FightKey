@@ -7,6 +7,10 @@
 *.drl
 *-bak
 
+# Code things
+.vscode/
+build/
+*.uf2
+
 # General
 *.zip
-.vscode/
