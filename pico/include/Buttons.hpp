@@ -9,6 +9,7 @@ namespace fightkey {
     enum class Button {
         Up, Down, Left, Right, Start, Select,
         LightPunch, MediumPunch, HeavyPunch, AllPunch,
-        LightKick, MediumKick, HeavyKick, AllKick
+        LightKick, MediumKick, HeavyKick, AllKick,
+        Escape
     };
 }
