@@ -46,13 +46,13 @@ const std::map<Button, uint8_t> g_keyMapping = {
 };
 
 int main(void) {
-    const auto controller = std::make_shared<GpioController>(g_btnMapping);
+    const GpioController controller(g_btnMapping);
     HidKeyboard keyboard(g_keyMapping);
 
     while(1) {
         keyboard.update();
         
-        const auto btnState = cont->state();
+        const auto btnState = controller->state();
         for(const auto &btnStatePair : btnState) {
             if(btnStatePair.second) {
                 keyboard.pressKey(btnStatePair.first);

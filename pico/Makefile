@@ -1,3 +1,6 @@
+# This MUST be used on a Linux system (though that includes WSL). Sorry
+# Also install-deps only works on Debian systems.
+
 # Project settings for main game card file
 OBJNAME :=			fight-key
 SRC :=				$(wildcard src/*.cpp)
@@ -8,10 +11,7 @@ HEADERS :=			$(wildcard include/*.hpp)
 all : /tmp/pico-sdk $(OBJNAME).uf2
 
 .PHONY : install-deps
-	@if ! [ "$(shell id -u)" = 0 ];then
-		@echo "You are not root, run this target as root please"
-		exit 1
-	fi
+install-deps :
 	apt install -y \
 		git cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential
 
