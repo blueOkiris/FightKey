@@ -37,6 +37,8 @@ namespace fightkey {
             void update(void);
             void pressKey(const Button btn);
             void releaseKey(void);
+            void delayMs(int delay);
+            void delayUs(int delay);
             bool isKeyPressed(const Button btn);
         
         private:

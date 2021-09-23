@@ -3,8 +3,11 @@
  * Description: Entry point for Keyboard system
  */
 
+#include <stdlib.h>
+#include <pico/stdlib.h>
 #include <bsp/board.h>
 #include <map>
+#include <vector>
 #include <memory>
 #include <Buttons.hpp>
 #include <Controller.hpp>
@@ -35,30 +38,67 @@ const std::map<Button, uint8_t> g_keyMapping = {
     { Button::Right,        HID_KEY_ARROW_RIGHT },
     { Button::Start,        HID_KEY_ENTER },
     { Button::Select,       HID_KEY_SHIFT_LEFT },
-    { Button::LightPunch,   HID_KEY_J },
-    { Button::MediumPunch,  HID_KEY_K },
-    { Button::HeavyPunch,   HID_KEY_L },
-    { Button::AllPunch,     HID_KEY_BRACKET_LEFT },
-    { Button::LightKick,    HID_KEY_U },
-    { Button::MediumKick,   HID_KEY_I },
-    { Button::HeavyKick,    HID_KEY_O },
+    { Button::LightPunch,   HID_KEY_U },
+    { Button::MediumPunch,  HID_KEY_I },
+    { Button::HeavyPunch,   HID_KEY_O },
+    { Button::AllPunch,     HID_KEY_P },
+    { Button::LightKick,    HID_KEY_J },
+    { Button::MediumKick,   HID_KEY_K },
+    { Button::HeavyKick,    HID_KEY_L },
     { Button::AllKick,      HID_KEY_SEMICOLON }
 };
 
+const int pressToReleaseDelay = 30; // Minimum press down before an up registers
+
+void readButtonsSendKeys(void); // Primary functionality
+void testHid(void);
+void testButtons(void);
+
+void keyboardPressAndReleaseKey(const Button btn, HidKeyboard &keyboard) {
+    keyboard.pressKey(btn);
+    keyboard.update();
+    keyboard.delayMs(pressToReleaseDelay);
+    keyboard.releaseKey();
+    keyboard.update();
+    keyboard.delayMs(pressToReleaseDelay);
+}
+
 int main(void) {
+    //readButtonsSendKeys();
+    testHid();
+    //testButtons();
+
+    return 0;
+}
+
+void readButtonsSendKeys(void) {
     const GpioController controller(g_btnMapping);
     HidKeyboard keyboard(g_keyMapping);
 
     while(1) {
-        keyboard.update();
-        
         const auto btnState = controller.state();
         for(const auto &btnStatePair : btnState) {
             if(btnStatePair.second) {
-                keyboard.pressKey(btnStatePair.first);
-                keyboard.releaseKey();
+                keyboardPressAndReleaseKey(btnStatePair.first, keyboard);
             }
         }
     }
-    return 0;
+}
+
+void testHid(void) {
+    HidKeyboard keyboard(g_keyMapping);
+    
+    while(1) {
+        keyboardPressAndReleaseKey(Button::Down, keyboard);
+        keyboardPressAndReleaseKey(Button::Right, keyboard);
+        keyboardPressAndReleaseKey(Button::Down, keyboard);
+        keyboardPressAndReleaseKey(Button::Right, keyboard);
+        keyboardPressAndReleaseKey(Button::LightKick, keyboard);
+
+        keyboard.delayMs(1000);
+    }
+}
+
+void testButtons(void) {
+
 }

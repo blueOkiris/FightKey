@@ -8,6 +8,8 @@
 #include <tusb.h>
 #include <bsp/board.h>
 #include <usb_descriptors.h>
+#include <stdlib.h>
+#include <pico/stdlib.h>
 #include <Hid.hpp>
 
 using namespace fightkey;
@@ -76,6 +78,22 @@ void HidKeyboard::pressKey(const Button btn) {
 
 bool HidKeyboard::isKeyPressed(const Button btn) {
     return (_key == _keyMappings[btn]) && !_release;
+}
+
+void HidKeyboard::delayMs(int delay) {
+    while(delay > 0) {
+        update();
+        sleep_ms(1);
+        delay--;
+    }
+}
+
+void HidKeyboard::delayUs(int delay) {
+    while(delay > 0) {
+        update();
+        sleep_us(1);
+        delay--;
+    }
 }
 
 void HidKeyboard::update(void) {
