@@ -5,7 +5,7 @@ HEADERS :=			$(wildcard include/*.hpp)
 
 # Helper targets
 .PHONY : all
-all : /tmp/pico-sdk $(OBJNAME).uf2 $(WR_PC_OBJNAME) $(AS_OBJNAME)
+all : /tmp/pico-sdk $(OBJNAME).uf2
 
 .PHONY : install-deps
 	@if ! [ "$(shell id -u)" = 0 ];then
@@ -22,44 +22,12 @@ all : /tmp/pico-sdk $(OBJNAME).uf2 $(WR_PC_OBJNAME) $(AS_OBJNAME)
 .PHONY : clean
 clean :
 	rm -rf /tmp/pico-sdk
-	rm -rf $(PROJFOLDER)/build
+	rm -rf build
 	rm -rf *.uf2
-	rm -rf $(WR_PC_OBJNAME)
-	rm -rf $(WR_PC_PROJFOLDER)/obj
-	rm -rf $(WR_PC_PROJFOLDER)/bin
-	rm -rf $(AS_OBJNAME)
-	rm -rf $(AS_PROJFOLDER)/obj
-	rm -rf $(AS_PROJFOLDER)/bin
-	rm -rf writer-proj
-	rm -rf libSystem.IO.Ports.Native.so 
 
 # Main targets
 $(OBJNAME).uf2 : /tmp/pico-sdk $(SRC) $(HEADERS) $(PROJFOLDER)/CMakeLists.txt
 	mkdir -p $(PROJFOLDER)/build
-	cd $(PROJFOLDER)/build; PICO_SDK_PATH=/tmp/pico-sdk cmake ..
-	cd $(PROJFOLDER)/build; make
-	cp $(PROJFOLDER)/build/$(OBJNAME).uf2 .
-
-$(WR_PC_OBJNAME) : /tmp/pico-sdk $(WR_PC_SRC)
-	cd $(WR_PC_PROJFOLDER); \
-		dotnet publish \
-			-c Release -r $(WR_PC_ARCH) \
-			-p:PublishSingleFile=true --self-contained true
-	cp \
-		$(WR_PC_PROJFOLDER)/bin/Release/net5.0/$(WR_PC_ARCH)/publish/pc \
-		$(WR_PC_OBJNAME)
-
-game-writer.uf2 : /tmp/pico-sdk $(WR_PC_OBJNAME) writer-proj/* $(wildcard common/include/*.hpp) $(wildcard common/src/*.cpp)
-	mkdir -p writer-proj/build
-	cd writer-proj/build; PICO_SDK_PATH=/tmp/pico-sdk cmake ..
-	cd writer-proj/build; make
-	cp writer-proj/build/game-writer.uf2 .
-
-$(AS_OBJNAME) : $(AS_SRC)
-	cd $(AS_PROJFOLDER); \
-		dotnet publish \
-			-c Release -r $(AS_ARCH) \
-			-p:PublishSingleFile=true --self-contained true
-	cp \
-		$(AS_PROJFOLDER)/bin/Release/net5.0/$(AS_ARCH)/publish/assembler \
-		$(AS_OBJNAME)
+	cd build; PICO_SDK_PATH=/tmp/pico-sdk cmake ..
+	cd build; make
+	cp build/$(OBJNAME).uf2 .
