@@ -26,8 +26,8 @@ clean :
 	rm -rf *.uf2
 
 # Main targets
-$(OBJNAME).uf2 : /tmp/pico-sdk $(SRC) $(HEADERS) $(PROJFOLDER)/CMakeLists.txt
-	mkdir -p $(PROJFOLDER)/build
+$(OBJNAME).uf2 : /tmp/pico-sdk $(SRC) $(HEADERS) CMakeLists.txt
+	mkdir -p build
 	cd build; PICO_SDK_PATH=/tmp/pico-sdk cmake ..
 	cd build; make
 	cp build/$(OBJNAME).uf2 .
