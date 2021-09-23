@@ -1,0 +1,12 @@
+# Model Things
+*.blend1
+
+# PCB Outputs
+*.gbr
+*.gbrjob
+*.drl
+*-bak
+
+# General
+*.zip
+.vscode/

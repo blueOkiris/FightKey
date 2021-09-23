@@ -1,24 +1,7 @@
 # Project settings for main game card file
-OBJNAME :=			game-card
-PROJFOLDER :=		game-card
-SRC :=				$(wildcard $(PROJFOLDER)/src/*.cpp) \
-					$(wildcard common/src/*.cpp)
-HEADERS :=			$(wildcard $(PROJFOLDER)/include/*.hpp) \
-					$(wildcard common/include/*.hpp)
-
-# Project settings for PC side of rom writer (C# proj)
-WR_PC_OBJNAME :=	rom-writer-pc
-WR_PC_PROJFOLDER :=	rom-writer
-WR_PC_SRC :=		$(wildcard $(WR_PC_PROJFOLDER)/*.cs) \
-					$(wildcard $(WR_PC_PROJFOLDER)/pc.csproj)
-WR_PC_ARCH :=		linux-x64
-
-# Project settings for game card assembler
-AS_OBJNAME :=		gca
-AS_PROJFOLDER :=	assembler
-AS_SRC :=			$(wildcard $(AS_PROJFOLDER)/*.cs) \
-					$(wildcard $(AS_PROJFOLDER)/assembler.csproj)
-AS_ARCH :=			linux-x64
+OBJNAME :=			fight-key
+SRC :=				$(wildcard src/*.cpp)
+HEADERS :=			$(wildcard include/*.hpp)
 
 # Helper targets
 .PHONY : all

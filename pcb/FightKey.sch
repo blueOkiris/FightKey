@@ -4,7 +4,7 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "Fight Key Direction Module"
+Title "Fight Key PCB"
 Date "2021-09-21"
 Rev "1"
 Comp "Dylan Turner"
