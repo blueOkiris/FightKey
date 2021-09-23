@@ -55,15 +55,6 @@ void readButtonsSendKeys(void); // Primary functionality
 void testHid(void);
 void testButton(const Button btnToTest);
 
-void keyboardPressAndReleaseKey(const Button btn, HidKeyboard &keyboard) {
-    keyboard.pressKey(btn);
-    keyboard.update();
-    keyboard.delayMs(pressToReleaseDelay);
-    keyboard.releaseKey();
-    keyboard.update();
-    keyboard.delayMs(pressToReleaseDelay);
-}
-
 int main(void) {
     readButtonsSendKeys();
     //testHid();
@@ -76,14 +67,31 @@ void readButtonsSendKeys(void) {
     const GpioController controller(g_btnMapping);
     HidKeyboard keyboard(g_keyMapping);
 
+    Button heldBtn = Button::Up;
+
     while(1) {
+        keyboard.update();
+
         const auto btnState = controller.state();
         for(const auto &btnStatePair : btnState) {
             if(btnStatePair.second) {
-                keyboardPressAndReleaseKey(btnStatePair.first, keyboard);
+                keyboard.pressKey(btnStatePair.first);
+                //keyboard.delayMs(pressToReleaseDelay);
+            } else {
+                keyboard.releaseKey(btnStatePair.first);
+                //keyboard.delayMs(pressToReleaseDelay);
             }
         }
     }
+}
+
+void keyboardPressAndReleaseKey(const Button btn, HidKeyboard &keyboard) {
+    keyboard.pressKey(btn);
+    keyboard.update();
+    keyboard.delayMs(pressToReleaseDelay);
+    keyboard.releaseKey(btn);
+    keyboard.update();
+    keyboard.delayMs(pressToReleaseDelay);
 }
 
 void testHid(void) {

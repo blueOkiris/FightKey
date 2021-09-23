@@ -10,6 +10,9 @@
 #include <usb_descriptors.h>
 #include <stdlib.h>
 #include <pico/stdlib.h>
+#include <vector>
+#include <utility>
+#include <map>
 #include <Hid.hpp>
 
 using namespace fightkey;
@@ -61,23 +64,9 @@ void tud_resume_cb(void) {
 HidKeyboard::HidKeyboard(const std::map<Button, uint8_t> &keyMappings) :
         _keyMappings(keyMappings),
         _pollIntervalMs(10), _startMs(0),
-        _hasKey(false), _toggle(false), _release(false),
-        _key(0) {
+        _change(false) {
     board_init();
     tusb_init();
-}
-
-void HidKeyboard::releaseKey(void) {
-    _release = true;
-}
-
-void HidKeyboard::pressKey(const Button btn) {
-    _key = _keyMappings[btn];
-    _release = false; // Force a release
-}
-
-bool HidKeyboard::isKeyPressed(const Button btn) {
-    return (_key == _keyMappings[btn]) && !_release;
 }
 
 void HidKeyboard::delayMs(int delay) {
@@ -94,6 +83,34 @@ void HidKeyboard::delayUs(int delay) {
         sleep_us(1);
         delay--;
     }
+}
+
+void HidKeyboard::releaseKey(const Button btn) {
+    for(int i = 0; i < _pressedKeys.size(); i++) {
+        if(_pressedKeys[i].first == btn) {
+            _pressedKeys[i].second = false;
+            _change = true;
+        }
+    }
+}
+
+void HidKeyboard::pressKey(const Button btn) {
+    for(const auto &btnStatePair : _pressedKeys) {
+        if(btnStatePair.first == btn) {
+            return;
+        }
+    }
+    _change = true;
+    _pressedKeys.push_back(std::make_pair(btn, true));
+}
+
+bool HidKeyboard::isKeyPressed(const Button btn) {
+    for(const auto &btnStatePair : _pressedKeys) {
+        if(btnStatePair.first == btn) {
+            return btnStatePair.second;
+        }
+    }
+    return false;
 }
 
 void HidKeyboard::update(void) {
@@ -118,21 +135,24 @@ void HidKeyboard::update(void) {
 
     // Keyboard control
     if (tud_hid_ready()) {
-        if(_key != 0 && (_toggle = !_toggle) && !_hasKey) {
-            uint8_t keycode[6] = { 0 };
-            keycode[0] = _key;
+        if(_change) {
+            uint8_t keycode[6] = { 0, 0, 0, 0, 0, 0 };
+            for(int i = 0; i < _pressedKeys.size() && i < 6; i++) {
+                if(_pressedKeys[i].second) {
+                    // Add press
+                    keycode[i] = _keyMappings[_pressedKeys[i].first];
+                } else {
+                    // Send release
+                    keycode[i] = 0;
+                    _pressedKeys.erase(_pressedKeys.begin() + i);
+                    i--;
+                }
+            }
 
             tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
-            
-            _hasKey = true;
-            _key = 0;
-        } else if(_release) {
-            // send empty key report if previously has key pressed
-            if(_hasKey) {
-                tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, NULL);
-                board_delay(10);
-            }
-            _hasKey = 0;
+            board_delay(10);
+
+            _change = false;
         }
     }
 }

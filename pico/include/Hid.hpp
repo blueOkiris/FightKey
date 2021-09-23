@@ -5,6 +5,8 @@
 
 #include <stddef.h>
 #include <map>
+#include <vector>
+#include <utility>
 #include <Buttons.hpp>
 
 #pragma once
@@ -36,7 +38,7 @@ namespace fightkey {
 
             void update(void);
             void pressKey(const Button btn);
-            void releaseKey(void);
+            void releaseKey(const Button btn);
             void delayMs(int delay);
             void delayUs(int delay);
             bool isKeyPressed(const Button btn);
@@ -48,7 +50,7 @@ namespace fightkey {
             BlinkLed _led;
 
             uint32_t _startMs;
-            bool _hasKey, _toggle, _release;
-            uint8_t _key;
+            bool _change;
+            std::vector<std::pair<Button, bool>> _pressedKeys;
     };
 }
