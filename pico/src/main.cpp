@@ -28,7 +28,7 @@ const std::map<Button, uint> g_btnMapping = {
     { Button::HeavyKick,    11 },
     { Button::AllKick,      12 },
     { Button::LightPunch,   13 },
-    { Button::MediumPunch,  14 },
+    { Button::MediumPunch,  16 },
     { Button::HeavyPunch,   15 },
     { Button::AllPunch,     16 }
 };
