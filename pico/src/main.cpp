@@ -38,7 +38,7 @@ const std::map<Button, uint8_t> g_keyMapping = {
     { Button::Left,         HID_KEY_ARROW_LEFT },
     { Button::Right,        HID_KEY_ARROW_RIGHT },
     { Button::Start,        HID_KEY_ENTER },
-    { Button::Select,       HID_KEY_SHIFT_LEFT },
+    { Button::Select,       HID_KEY_ESCAPE },
     { Button::LightPunch,   HID_KEY_1 },
     { Button::MediumPunch,  HID_KEY_2 },
     { Button::HeavyPunch,   HID_KEY_3 },
@@ -46,9 +46,7 @@ const std::map<Button, uint8_t> g_keyMapping = {
     { Button::LightKick,    HID_KEY_5 },
     { Button::MediumKick,   HID_KEY_6 },
     { Button::HeavyKick,    HID_KEY_7 },
-    { Button::AllKick,      HID_KEY_8 },
-
-    { Button::Escape,       HID_KEY_ESCAPE }
+    { Button::AllKick,      HID_KEY_8 }
 };
 
 const int pressToReleaseDelay = 30; // Minimum press down before an up registers
@@ -78,9 +76,6 @@ void readButtonsSendKeys(void) {
         for(const auto &btnStatePair : btnState) {
             if(btnStatePair.second) {
                 keyboard.pressKey(btnStatePair.first);
-                if(btnStatePair.first == Button::Select) {
-                    keyboard.pressKey(Button::Escape);
-                }
             } else {
                 keyboard.releaseKey(btnStatePair.first);
             }
