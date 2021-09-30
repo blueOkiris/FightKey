@@ -25,48 +25,7 @@ pico_sdk_import.cmake : /tmp/pico-sdk
 .PHONY : clean
 clean :
 	rm -rf /tmp/pico-sdk
-	rm -rf 1111
-	
-	1
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	15pico_sdk_import.cmake
+	rm -rf pico_sdk_import.cmake
 	rm -rf build
 	rm -rf *.uf2
 

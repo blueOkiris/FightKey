@@ -66,9 +66,7 @@ int main(void) {
 void readButtonsSendKeys(void) {
     const GpioController controller(g_btnMapping);
     HidKeyboard keyboard(g_keyMapping);
-
-    Button heldBtn = Button::Up;
-
+    
     while(1) {
         keyboard.update();
 
