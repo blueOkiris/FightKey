@@ -4,7 +4,7 @@
 
 A keyboard base fight stick
 
-![Image of Physical Fight Key](/docs/images/physical-fight-key.jpg)
+![Image of Physical Fight Key](/pics/final.jpg)
 
 ## Subdirectories
 
