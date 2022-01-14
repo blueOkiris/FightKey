@@ -2,7 +2,7 @@
 
 ## Description
 
-A keyboard base fight stick
+A keyboard-based fight stick
 
 ![Image of Physical Fight Key](/pics/final.jpg)
 
