@@ -1,5 +1,5 @@
 # Model Things
-*.blend1
+*.stl
 
 # PCB Outputs
 *.gbr
