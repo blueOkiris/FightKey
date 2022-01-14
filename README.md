@@ -12,4 +12,4 @@ A keyboard base fight stick
 
  - pico - Code to upload to the pico within the Fight Key
 
- - model - model for the 3D printed case for the Fight Key
+ - enclosure - model for the 3D printed case for the Fight Key
