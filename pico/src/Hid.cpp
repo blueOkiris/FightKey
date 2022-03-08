@@ -156,3 +156,190 @@ void HidKeyboard::update(void) {
         }
     }
 }
+
+/* Gamepad stuff */
+
+HidGamepad::HidGamepad() :
+        _pollIntervalMs(10), _startMs(0),
+        _up(0), _down(0), _left(0), _right(0),
+        _report(hid_gamepad_report_t {
+            0, 0, 0, 0, 0, 0, GAMEPAD_HAT_CENTERED, 0
+        }) {
+    board_init();
+    tusb_init();
+}
+
+void HidGamepad::delayMs(int delay) {
+    while(delay > 0) {
+        update();
+        sleep_ms(1);
+        delay--;
+    }
+}
+
+void HidGamepad::delayUs(int delay) {
+    while(delay > 0) {
+        update();
+        sleep_us(1);
+        delay--;
+    }
+}
+
+void HidGamepad::pressButton(const Button btn) {
+    switch(btn) {
+        // Hat buttons
+        case Button::Up:
+            _up = 1;
+            break;
+        case Button::Down:
+            _down = 1;
+            break;
+        case Button::Left:
+            _left = 1;
+            break;
+        case Button::Right:
+            _right = 1;
+            break;
+
+        // Specific buttons
+        case Button::LightPunch:
+            _report.buttons |= GAMEPAD_BUTTON_WEST;
+            break;
+        case Button::MediumPunch:
+            _report.buttons |= GAMEPAD_BUTTON_NORTH;
+            break;
+        case Button::HeavyPunch:
+            _report.buttons |= GAMEPAD_BUTTON_TR;
+            break;
+        case Button::AllPunch:
+            _report.buttons |= GAMEPAD_BUTTON_TL;
+            break;
+        case Button::LightKick:
+            _report.buttons |= GAMEPAD_BUTTON_SOUTH;
+            break;
+        case Button::MediumKick:
+            _report.buttons |= GAMEPAD_BUTTON_EAST;
+            break;
+        case Button::HeavyKick:
+            _report.buttons |= GAMEPAD_BUTTON_TR2;
+            break;
+        case Button::AllKick:
+            _report.buttons |= GAMEPAD_BUTTON_TL2;
+            break;
+        case Button::Start:
+            _report.buttons |= GAMEPAD_BUTTON_START;
+            break;
+        case Button::Select:
+            _report.buttons |= GAMEPAD_BUTTON_SELECT;
+            break;
+    }
+}
+
+void HidGamepad::releaseButton(const Button btn) {
+    switch(btn) {
+        // Hat buttons
+        case Button::Up:
+            _up = 0;
+            break;
+        case Button::Down:
+            _down = 0;
+            break;
+        case Button::Left:
+            _left = 0;
+            break;
+        case Button::Right:
+            _right = 0;
+            break;
+
+        // Specific buttons
+        case Button::LightPunch:
+            _report.buttons &= ~GAMEPAD_BUTTON_WEST;
+            break;
+        case Button::MediumPunch:
+            _report.buttons &= ~GAMEPAD_BUTTON_NORTH;
+            break;
+        case Button::HeavyPunch:
+            _report.buttons &= ~GAMEPAD_BUTTON_TR;
+            break;
+        case Button::AllPunch:
+            _report.buttons &= ~GAMEPAD_BUTTON_TL;
+            break;
+        case Button::LightKick:
+            _report.buttons &= ~GAMEPAD_BUTTON_SOUTH;
+            break;
+        case Button::MediumKick:
+            _report.buttons &= ~GAMEPAD_BUTTON_EAST;
+            break;
+        case Button::HeavyKick:
+            _report.buttons &= ~GAMEPAD_BUTTON_TR2;
+            break;
+        case Button::AllKick:
+            _report.buttons &= ~GAMEPAD_BUTTON_TL2;
+            break;
+        case Button::Start:
+            _report.buttons &= ~GAMEPAD_BUTTON_START;
+            break;
+        case Button::Select:
+            _report.buttons &= ~GAMEPAD_BUTTON_SELECT;
+            break;
+    }
+}
+
+void HidGamepad::update(void) {
+    // HID library stuff
+    tud_task(); // Device task for usb
+    _led.updateTask(); // Show device status
+
+    // Not enough time yet
+    if(board_millis() - _startMs < _pollIntervalMs) {
+        return;
+    }
+    _startMs += _pollIntervalMs;
+
+    // Remote wakeup
+    if(tud_suspended()) {
+        /*
+         * Wake up host if we are in suspend mode
+         * and REMOTE_WAKEUP feature is enabled by host
+         */
+        tud_remote_wakeup();
+    }
+
+    // Keyboard control
+    if (tud_hid_ready()) {
+        if(_up && _down && _left && _right) {
+            _report.hat = GAMEPAD_HAT_CENTERED;
+        } else if(_down && _left && _right) {
+            _report.hat = GAMEPAD_HAT_DOWN;
+        } else if(_down && _left) {
+            _report.hat = GAMEPAD_HAT_DOWN_LEFT;
+        } else if(_down && _right) {
+            _report.hat = GAMEPAD_HAT_DOWN_RIGHT;
+        } else if(_down) {
+            _report.hat = GAMEPAD_HAT_DOWN;
+        } else if(_up && _left && _right) {
+            _report.hat = GAMEPAD_HAT_UP;
+        } else if(_up && _left) {
+            _report.hat = GAMEPAD_HAT_UP_LEFT;
+        } else if(_up && _right) {
+            _report.hat = GAMEPAD_HAT_UP_RIGHT;
+        } else if(_up) {
+            _report.hat = GAMEPAD_HAT_UP;
+        } else if(_left && _right) {
+            _report.hat = GAMEPAD_HAT_CENTERED;
+        } else if(_left) {
+            _report.hat = GAMEPAD_HAT_LEFT;
+        } else if(_right) {
+            _report.hat = GAMEPAD_HAT_RIGHT;
+        } else {
+            _report.hat = GAMEPAD_HAT_CENTERED;
+        }
+
+        tud_hid_gamepad_report(
+            REPORT_ID_GAMEPAD,
+            _report.x, _report.y, _report.z, _report.rz,
+            _report.rx, _report.ry, _report.hat, _report.buttons
+        );
+        board_delay(10);
+    }
+}

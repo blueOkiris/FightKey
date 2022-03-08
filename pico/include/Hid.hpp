@@ -53,4 +53,26 @@ namespace fightkey {
             bool _change;
             std::vector<std::pair<Button, bool>> _pressedKeys;
     };
+
+    // Alternative to keybaord that supports GamePad inputs
+    class HidGamepad {
+        public:
+            HidGamepad(void); // No alternate mappings
+
+            void update(void);
+
+            void pressButton(const Button btn);
+            void releaseButton(const Button btn);
+
+            void delayMs(int delay);
+            void delayUs(int delay);
+        
+        private:
+            const int _pollIntervalMs;
+            BlinkLed _led;
+            uint32_t _startMs;
+
+            char _up, _down, _left, _right;
+            hid_gamepad_report_t _report;
+    };
 }

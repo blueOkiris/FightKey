@@ -71,17 +71,21 @@ int main(void) {
 
 void readButtonsSendKeys(void) {
     const GpioController controller(g_btnMapping);
-    HidKeyboard keyboard(g_keyMapping);
+    //HidKeyboard keyboard(g_keyMapping);
+    HidGamepad gamepad;
     
     while(1) {
-        keyboard.update();
+        //keyboard.update();
+        gamepad.update();
 
         const auto btnState = controller.state();
         for(const auto &btnStatePair : btnState) {
             if(btnStatePair.second) {
-                keyboard.pressKey(btnStatePair.first);
+                //keyboard.pressKey(btnStatePair.first);
+                gamepad.pressButton(btnStatePair.first);
             } else {
-                keyboard.releaseKey(btnStatePair.first);
+                //keyboard.releaseKey(btnStatePair.first);
+                gamepad.releaseButton(btnStatePair.first);
             }
         }
     }
