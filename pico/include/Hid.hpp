@@ -73,6 +73,7 @@ namespace fightkey {
             uint32_t _startMs;
 
             char _up, _down, _left, _right;
+            char _lt, _rt;
             hid_gamepad_report_t _report;
     };
 }

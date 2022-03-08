@@ -161,7 +161,7 @@ void HidKeyboard::update(void) {
 
 HidGamepad::HidGamepad() :
         _pollIntervalMs(10), _startMs(0),
-        _up(0), _down(0), _left(0), _right(0),
+        _up(0), _down(0), _left(0), _right(0), _lt(0), _rt(0),
         _report(hid_gamepad_report_t {
             0, 0, 0, 0, 0, 0, GAMEPAD_HAT_CENTERED, 0
         }) {
@@ -220,17 +220,19 @@ void HidGamepad::pressButton(const Button btn) {
         case Button::MediumKick:
             _report.buttons |= GAMEPAD_BUTTON_EAST;
             break;
-        case Button::HeavyKick:
-            _report.buttons |= GAMEPAD_BUTTON_TR2;
-            break;
-        case Button::AllKick:
-            _report.buttons |= GAMEPAD_BUTTON_TL2;
-            break;
         case Button::Start:
             _report.buttons |= GAMEPAD_BUTTON_START;
             break;
         case Button::Select:
             _report.buttons |= GAMEPAD_BUTTON_SELECT;
+            break;
+
+        // Triggers
+        case Button::HeavyKick:
+            _report.rz = 127;
+            break;
+        case Button::AllKick:
+            _report.z = 127;
             break;
     }
 }
@@ -270,17 +272,19 @@ void HidGamepad::releaseButton(const Button btn) {
         case Button::MediumKick:
             _report.buttons &= ~GAMEPAD_BUTTON_EAST;
             break;
-        case Button::HeavyKick:
-            _report.buttons &= ~GAMEPAD_BUTTON_TR2;
-            break;
-        case Button::AllKick:
-            _report.buttons &= ~GAMEPAD_BUTTON_TL2;
-            break;
         case Button::Start:
             _report.buttons &= ~GAMEPAD_BUTTON_START;
             break;
         case Button::Select:
             _report.buttons &= ~GAMEPAD_BUTTON_SELECT;
+            break;
+
+        // Triggers
+        case Button::HeavyKick:
+            _report.rz = -128;
+            break;
+        case Button::AllKick:
+            _report.z = -128;
             break;
     }
 }
