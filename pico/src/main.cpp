@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <pico/stdlib.h>
 #include <bsp/board.h>
+#include <hardware/vreg.h>
 #include <map>
 #include <vector>
 #include <memory>
@@ -56,6 +57,11 @@ void testHid(void);
 void testButton(const Button btnToTest);
 
 int main(void) {
+    // Speed up clock
+    vreg_set_voltage(VREG_VOLTAGE_1_20);
+    sleep_ms(10);
+    set_sys_clock_khz(295200, true);
+
     readButtonsSendKeys();
     //testHid();
     //testButton(Button::Up);
