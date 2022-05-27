@@ -58,9 +58,7 @@ void testButton(const Button btnToTest);
 
 int main(void) {
     // Speed up clock
-    //vreg_set_voltage(VREG_VOLTAGE_1_20);
-    //sleep_ms(10);
-    //set_sys_clock_khz(295200, true);
+    set_sys_clock_khz(270000, true);
 
     readButtonsSendKeys();
     //testHid();
