@@ -27,11 +27,11 @@ const std::map<Button, uint> g_btnMapping = {
     { Button::LightKick,    9 },
     { Button::MediumKick,   10 },
     { Button::HeavyKick,    15 },
-    { Button::AllKick,      16 },
+    { Button::AllKick,      12 },
     { Button::LightPunch,   13 },
     { Button::MediumPunch,  17 },
     { Button::HeavyPunch,   11 },
-    { Button::AllPunch,     12 }
+    { Button::AllPunch,     16 }
 };
 const std::map<Button, uint8_t> g_keyMapping = {
     { Button::Up,           HID_KEY_ARROW_UP },
