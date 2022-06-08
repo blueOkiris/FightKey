@@ -26,12 +26,12 @@ const std::map<Button, uint> g_btnMapping = {
     { Button::Select,       8 },
     { Button::LightKick,    9 },
     { Button::MediumKick,   10 },
-    { Button::HeavyKick,    11 },
-    { Button::AllKick,      16 },
+    { Button::HeavyKick,    15 },
+    { Button::AllKick,      12 },
     { Button::LightPunch,   13 },
     { Button::MediumPunch,  17 },
-    { Button::HeavyPunch,   15 },
-    { Button::AllPunch,     12 }
+    { Button::HeavyPunch,   11 },
+    { Button::AllPunch,     16 }
 };
 const std::map<Button, uint8_t> g_keyMapping = {
     { Button::Up,           HID_KEY_ARROW_UP },
@@ -58,9 +58,7 @@ void testButton(const Button btnToTest);
 
 int main(void) {
     // Speed up clock
-    vreg_set_voltage(VREG_VOLTAGE_1_20);
-    sleep_ms(10);
-    set_sys_clock_khz(295200, true);
+    set_sys_clock_khz(270000, true);
 
     readButtonsSendKeys();
     //testHid();

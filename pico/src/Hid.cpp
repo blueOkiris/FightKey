@@ -203,22 +203,22 @@ void HidGamepad::pressButton(const Button btn) {
 
         // Specific buttons
         case Button::LightPunch:
-            _report.buttons |= GAMEPAD_BUTTON_WEST;
+            _report.buttons |= GAMEPAD_BUTTON_NORTH; // Actually X
             break;
         case Button::MediumPunch:
-            _report.buttons |= GAMEPAD_BUTTON_NORTH;
+            _report.buttons |= GAMEPAD_BUTTON_WEST; // Actually Y
             break;
         case Button::HeavyPunch:
             _report.buttons |= GAMEPAD_BUTTON_TR;
             break;
-        case Button::AllPunch:
+        case Button::HeavyKick:
             _report.buttons |= GAMEPAD_BUTTON_TL;
             break;
         case Button::LightKick:
-            _report.buttons |= GAMEPAD_BUTTON_SOUTH;
+            _report.buttons |= GAMEPAD_BUTTON_SOUTH; // A
             break;
         case Button::MediumKick:
-            _report.buttons |= GAMEPAD_BUTTON_EAST;
+            _report.buttons |= GAMEPAD_BUTTON_EAST; // B
             break;
         case Button::Start:
             _report.buttons |= GAMEPAD_BUTTON_START;
@@ -228,7 +228,7 @@ void HidGamepad::pressButton(const Button btn) {
             break;
 
         // Triggers
-        case Button::HeavyKick:
+        case Button::AllPunch:
             _report.rz = 127;
             break;
         case Button::AllKick:
@@ -255,22 +255,22 @@ void HidGamepad::releaseButton(const Button btn) {
 
         // Specific buttons
         case Button::LightPunch:
-            _report.buttons &= ~GAMEPAD_BUTTON_WEST;
+            _report.buttons &= ~GAMEPAD_BUTTON_NORTH; // X
             break;
         case Button::MediumPunch:
-            _report.buttons &= ~GAMEPAD_BUTTON_NORTH;
+            _report.buttons &= ~GAMEPAD_BUTTON_WEST; // Y
             break;
         case Button::HeavyPunch:
             _report.buttons &= ~GAMEPAD_BUTTON_TR;
             break;
-        case Button::AllPunch:
+        case Button::HeavyKick:
             _report.buttons &= ~GAMEPAD_BUTTON_TL;
             break;
         case Button::LightKick:
-            _report.buttons &= ~GAMEPAD_BUTTON_SOUTH;
+            _report.buttons &= ~GAMEPAD_BUTTON_SOUTH; // A
             break;
         case Button::MediumKick:
-            _report.buttons &= ~GAMEPAD_BUTTON_EAST;
+            _report.buttons &= ~GAMEPAD_BUTTON_EAST; // B
             break;
         case Button::Start:
             _report.buttons &= ~GAMEPAD_BUTTON_START;
@@ -280,7 +280,7 @@ void HidGamepad::releaseButton(const Button btn) {
             break;
 
         // Triggers
-        case Button::HeavyKick:
+        case Button::AllPunch:
             _report.rz = -128;
             break;
         case Button::AllKick:
