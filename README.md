@@ -4,6 +4,10 @@
 
 A keyboard-based fight stick
 
+![Image of New Physical Fight Key](/pics/fightkey-wide.jpg)
+
+Version 1:
+
 ![Image of Physical Fight Key](/pics/final.jpg)
 
 ## Subdirectories
